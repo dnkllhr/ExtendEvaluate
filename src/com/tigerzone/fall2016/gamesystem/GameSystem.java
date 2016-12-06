@@ -63,6 +63,8 @@ public class GameSystem implements PlayerInAdapter {
 
         ts = new TileStack(tileStack);
 
+        ts.truncateTS(20);
+
         // Tile Unplaceable Test
         //ts = new TileStack(getUnplaceableTestStack());
 
@@ -120,7 +122,7 @@ public class GameSystem implements PlayerInAdapter {
                     // notify outAdapter with results
                     prepareNextTurn();
                 }
-                else if( turn.getPredatorPlacementZone()!=0 && am.invalidMeeplePlacement(turn.getPlayableTile(), turn.getPredatorPlacementZone(), turn.getRotationDegrees())){
+                else if( turn.getPredatorPlacementZone()!=0  && am.invalidMeeplePlacement(turn.getPlayableTile(), turn.getPredatorPlacementZone(), turn.getRotationDegrees())){
                     outAdapter.forfeitInvalidMeeple(getCurrentPlayerID());
                     endOfGame();
                 }

@@ -74,7 +74,7 @@ public class AreaManager {
     public void addTile(Point position, PlayableTile playableTile, int degrees){
         BoardTile boardTile = convertToBoardTile(playableTile);
         boardTile.rotateCCW(degrees);
-        gameBoard.placeTile(position, boardTile);
+        gameBoard.placeTile(position , boardTile);
         AreaBuilder areaBuilder = new AreaBuilder(gameBoard, boardTile);
         areaBuilder.build(position);
         Set<Area> newAreas = areaBuilder.buildNewAreas();
@@ -119,7 +119,7 @@ public class AreaManager {
         updatedAreas.removeAll(deletedAreas);
         addUpdatedAreas(updatedAreas);
         boolean predatorPlaceable = false;
-        boolean crocPlaced = false;
+        boolean crocNotPlaced = true;
         if (predatorPlacementZone > 0) {
             TerrainNode predatorPlacementNode = boardTile.getTerrainNode(predatorPlacementZone);
             if (predatorPlacementNode.getMinimumZoneValue() != predatorPlacementZone) {
@@ -136,11 +136,7 @@ public class AreaManager {
             for (TerrainNode terrainNode: boardTile.getTerrainNodeList()) {
                 if (terrainNode.getArea().isPredatorPlaceable(predator)) {
                     terrainNode.getArea().placePredator(predator);
-                    crocPlaced = true;
-                    break;
-                }
-                else{
-                    crocPlaced = false;
+                    crocNotPlaced = false;
                 }
             }
         }
@@ -165,7 +161,7 @@ public class AreaManager {
             }
         }
         if (predatorPlacementZone==0) {
-            return crocPlaced;
+            return !crocNotPlaced;
         }
         else {
             return predatorPlaceable;

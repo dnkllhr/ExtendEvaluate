@@ -57,6 +57,9 @@ public class TrailArea extends CrocodileFriendlyArea {
         this.preyList.add(deer);
     }
 
+    @Override
+    public void addAnimal(Goat goat){this.preyList.add(goat);}
+
     /**
      * Returns the number of prey after taking into account predation
      * from crocodiles

@@ -4,6 +4,7 @@ import com.tigerzone.fall2016.tileplacement.tile.PlayableTile;
 import com.tigerzone.fall2016server.server.Logger;
 import com.tigerzone.fall2016server.server.TournamentServer;
 import com.tigerzone.fall2016server.server.protocols.GameToClientMessageFormatter;
+import com.tigerzone.fall2016server.server.protocols.ScoreParse;
 import com.tigerzone.fall2016server.tournament.tournamentplayer.PlayerStats;
 import com.tigerzone.fall2016server.tournament.tournamentplayer.TournamentPlayer;
 
@@ -83,6 +84,14 @@ public class Match extends Thread {
             String gamePlayer1Response = null;
 
             if (!game1.isOver()) {
+                try { //attempt to clear buffer
+                    game1player.readPlayerMessage();
+                    System.out.println("Buffer cleared.");
+                } catch (SocketTimeoutException e) {
+
+                } catch (IOException e) {
+
+                }
                 String game1playerPrompt = GameToClientMessageFormatter.generateMessageToActivePlayer(game1.getGameID(), 1, moveNumber, game1.getCurrentTile());
                 game1player.sendMessageToPlayer(game1playerPrompt);
                 //timeout to start
@@ -103,6 +112,14 @@ public class Match extends Thread {
             boolean game2Timeout = false;
             String gamePlayer2Response = null;
             if (!game2.isOver()) {
+                try { //attempt to clear buffer
+                    game2player.readPlayerMessage();
+                    System.out.println("Buffer cleared.");
+                } catch (SocketTimeoutException e) {
+
+                } catch (IOException e) {
+
+                }
                 String game2playerPrompt = GameToClientMessageFormatter.generateMessageToActivePlayer(game2.getGameID(), 1, moveNumber, game2.getCurrentTile());
                 game2player.sendMessageToPlayer(game2playerPrompt);
                 //timeout to start
@@ -194,6 +211,10 @@ public class Match extends Thread {
     }
 
     private void notifyEndGameToPlayers() {
+        checkForOutcomes(game1, player1);
+        checkForOutcomes(game2, player1);
+        checkForOutcomes(game1, player2);
+        checkForOutcomes(game2, player2);
         if (forfeitGameMap.get(game1) == null) {
             sendEndMessage(game1);
         } else {
@@ -203,6 +224,34 @@ public class Match extends Thread {
             sendEndMessage(game2);
         } else {
             sendForfeitMessage(game2);
+        }
+    }
+
+    private void checkForOutcomes(Game game, TournamentPlayer player){
+        player.sendMessageToPlayer("GAME " + game.getGameID() + " OVER SEND OUTCOMES");
+        String playerResponse = null;
+        boolean gameTimeout = false;
+        try { //here, we attempt to read from the client socket and throw a timeout exception if it isn't done fast enough
+            playerResponse = player.readPlayerMessage();
+        } catch (SocketTimeoutException e) {
+            gameTimeout = true;
+            playerResponse = "GAME " + game.getGameID() + " PLAYER " + player.getUsername() + " FORFEITED: DOES NOT KNOW OUTCOME";
+            System.out.println("Timeout in game 1: " + player.getUsername());
+            forfeitGameMap.put(game, player.getUsername());
+            player.sendMessageToPlayer(playerResponse);
+        } catch (IOException e) {
+            System.out.println("Caught IOException in match besides timeout (Player 1)");
+            System.out.println("This is their input " + playerResponse);
+            e.printStackTrace();
+        }
+        if(!gameTimeout){
+            if(ScoreParse.parseForCorrectness(playerResponse, game, game.getPlayer1(), game.getPlayer2())){
+                playerResponse = "GAME " + game.getGameID() + " PLAYER " + player.getUsername() + " FORFEITED: DOES NOT KNOW OUTCOME";
+                player.sendMessageToPlayer(playerResponse);
+                forfeitGameMap.put(game, player.getUsername());
+            }else{
+                return;
+            }
         }
     }
 

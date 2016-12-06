@@ -92,6 +92,8 @@ public abstract class Area implements SetAddable{
 
     public void addAnimal(Boar boar){}
 
+    public void addAnimal(Goat goat){}
+
     /**
      * This method is used when a player tries to place a predator to this Area
      * @param predator

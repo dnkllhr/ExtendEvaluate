@@ -9,11 +9,13 @@ public class Player {
     private String playerId;
     private int goodSupply; // Tigers
     private int badSupply;  // Crocodiles
+    private int goatSupply; //Goats
 
     public Player(String playerId) {
         this.playerId = playerId;
         this.goodSupply = 7;
         this.badSupply = 2;
+        this.goatSupply = 3;
     }
 
     /**
@@ -46,6 +48,12 @@ public class Player {
         }
     }
 
+    public void decrementGoatSupply(){
+        if(getGoatSupply() >= 1){
+            this.goatSupply--;
+        }
+    }
+
     /**
      * Accessor for playerId (unique identifier for player)
      * @return String
@@ -67,6 +75,8 @@ public class Player {
      * @return
      */
     public int getBadSupply(){ return this.badSupply; }
+
+    public int getGoatSupply(){return this.goatSupply;}
 
     /**
      * Determines whether this player is equal to another based on playerID

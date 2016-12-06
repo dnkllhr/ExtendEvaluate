@@ -6,7 +6,7 @@ import com.tigerzone.fall2016.gamesystem.Player;
 /**
  * Created by Aidan on 11/9/2016.
  */
-public class Tiger extends Predator {
+public class Tiger extends Animal implements Predator {
     private Player owner;
 
     public Tiger(Player owner) {

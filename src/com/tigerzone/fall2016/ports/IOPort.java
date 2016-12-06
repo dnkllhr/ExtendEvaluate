@@ -3,6 +3,7 @@ package com.tigerzone.fall2016.ports;
 import com.tigerzone.fall2016.adapters.PlayerInAdapter;
 import com.tigerzone.fall2016.adapters.PlayerOutAdapter;
 import com.tigerzone.fall2016.animals.Crocodile;
+import com.tigerzone.fall2016.animals.Goat;
 import com.tigerzone.fall2016.animals.Predator;
 import com.tigerzone.fall2016.animals.Tiger;
 import com.tigerzone.fall2016.area.DenArea;
@@ -150,7 +151,13 @@ public class IOPort implements PlayerOutAdapter {
             currentPlayer.decrementBadSupply();
             predator = new Crocodile(currentPlayer);
 
-        } else if (predatorStr.equals("NONE")) {
+        }
+        else if(predatorStr.equals("GOAT")){
+            currentPlayer.decrementGoatSupply();
+            predator = new Goat(currentPlayer);
+            zone = -1;
+        }
+        else if (predatorStr.equals("NONE")) {
             predator = null;
         }
 

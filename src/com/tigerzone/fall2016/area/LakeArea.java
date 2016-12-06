@@ -1,9 +1,6 @@
 package com.tigerzone.fall2016.area;
 
-import com.tigerzone.fall2016.animals.Boar;
-import com.tigerzone.fall2016.animals.Buffalo;
-import com.tigerzone.fall2016.animals.Deer;
-import com.tigerzone.fall2016.animals.Predator;
+import com.tigerzone.fall2016.animals.*;
 import com.tigerzone.fall2016.area.terrainnode.LakeTerrainNode;
 import com.tigerzone.fall2016.scoring.Scorer;
 
@@ -18,11 +15,13 @@ public class LakeArea extends CrocodileFriendlyArea {
     private boolean containsBoar;
     private boolean containsBuffalo;
     private boolean containsDeer;
+    private boolean containsGoat;
 
     public LakeArea(){
         this.containsBoar = false;
         this.containsBuffalo = false;
         this.containsDeer = false;
+        this.containsGoat = false;
     }
 
     @Override
@@ -42,6 +41,9 @@ public class LakeArea extends CrocodileFriendlyArea {
         }
         if(area.containsDeer() || this.containsDeer()){
             area.setContainsDeerToTrue();
+        }
+        if(area.containsGoat || this.containsGoat()){
+            area.setContainsGoatToTrue();
         }
     }
 
@@ -98,6 +100,9 @@ public class LakeArea extends CrocodileFriendlyArea {
         this.containsDeer = true;
     }
 
+    @Override
+    public void addAnimal(Goat goat){this.containsGoat = true;}
+
 
     /**
      * Returns the number of unique prey after predation
@@ -117,6 +122,10 @@ public class LakeArea extends CrocodileFriendlyArea {
         }
 
         if(this.containsDeer){
+            count++;
+        }
+
+        if(this.containsGoat){
             count++;
         }
 
@@ -141,6 +150,8 @@ public class LakeArea extends CrocodileFriendlyArea {
         return this.containsDeer;
     }
 
+    public boolean containsGoat(){return this.containsGoat;}
+
     void setContainsBoarToTrue(){
         this.containsBoar = true;
     }
@@ -153,6 +164,7 @@ public class LakeArea extends CrocodileFriendlyArea {
         this.containsDeer = true;
     }
 
+    void setContainsGoatToTrue(){this.containsGoat = true;}
 
 
     @Override

@@ -23,4 +23,9 @@ public class Deer extends Prey {
     public boolean isBuffalo() {
         return false;
     }
+
+    @Override
+    public boolean isGoat() {
+        return false;
+    }
 }

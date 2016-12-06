@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
  */
 public class LakeAreaTest {
     private LakeArea lakeArea;
-    private Predator crocodile;
+    private Crocodile crocodile;
     private Predator tiger;
     private Animal boar;
     private Animal buffalo;
